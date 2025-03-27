@@ -1,0 +1,198 @@
+Here’s a comprehensive list of **all possible SQL queries related to tables**, including **creation, modification, deletion, and retrieval of structure**.
+
+---
+
+## **📌 1. Table Creation & Schema Definition**
+### **🔹 Create a New Table**
+```sql
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    city VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+### **🔹 Create a Table from an Existing Table**
+```sql
+CREATE TABLE new_customers AS 
+SELECT customer_id, name, email FROM customers;
+```
+
+### **🔹 Create Table with Foreign Key**
+```sql
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT,
+    amount DECIMAL(10,2),
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+```
+
+---
+
+## **📌 2. Modify Table Structure (`ALTER TABLE`)**
+### **🔹 Add a New Column**
+```sql
+ALTER TABLE customers ADD phone VARCHAR(15);
+```
+### **🔹 Modify Column Data Type**
+```sql
+ALTER TABLE customers MODIFY phone BIGINT;
+```
+### **🔹 Rename a Column**
+```sql
+ALTER TABLE customers CHANGE phone contact_number VARCHAR(15);
+```
+### **🔹 Drop a Column**
+```sql
+ALTER TABLE customers DROP COLUMN city;
+```
+### **🔹 Add a Primary Key**
+```sql
+ALTER TABLE customers ADD PRIMARY KEY (customer_id);
+```
+### **🔹 Add a Foreign Key**
+```sql
+ALTER TABLE orders 
+ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(customer_id);
+```
+### **🔹 Remove Foreign Key**
+```sql
+ALTER TABLE orders DROP FOREIGN KEY fk_customer;
+```
+---
+
+## **📌 3. Retrieve Table Information**
+### **🔹 Get Table Structure (`DESC` or `SHOW COLUMNS`)**
+```sql
+DESC customers;
+```
+```sql
+SHOW COLUMNS FROM customers;
+```
+### **🔹 Get List of All Tables**
+```sql
+SHOW TABLES;
+```
+### **🔹 Get Table Creation SQL**
+```sql
+SHOW CREATE TABLE customers;
+```
+
+---
+
+## **📌 4. Insert, Update, Delete Data**
+### **🔹 Insert Data**
+```sql
+INSERT INTO customers (name, email, city) VALUES 
+('Alice', 'alice@example.com', 'New York'),
+('Bob', 'bob@example.com', 'Los Angeles');
+```
+### **🔹 Update Data**
+```sql
+UPDATE customers SET city = 'Chicago' WHERE customer_id = 1;
+```
+### **🔹 Delete Specific Row**
+```sql
+DELETE FROM customers WHERE customer_id = 1;
+```
+### **🔹 Delete All Data (`DELETE` vs `TRUNCATE`)**
+```sql
+DELETE FROM customers; -- Can be rolled back
+TRUNCATE TABLE customers; -- Faster but cannot be rolled back
+```
+
+---
+
+## **📌 5. Drop or Rename Table**
+### **🔹 Drop Table (Permanently Delete Table)**
+```sql
+DROP TABLE customers;
+```
+### **🔹 Rename a Table**
+```sql
+RENAME TABLE customers TO clients;
+```
+
+---
+
+## **📌 6. Clone a Table**
+### **🔹 Copy Table Structure (Without Data)**
+```sql
+CREATE TABLE customers_backup LIKE customers;
+```
+### **🔹 Copy Table With Data**
+```sql
+CREATE TABLE customers_backup AS SELECT * FROM customers;
+```
+
+---
+
+## **📌 7. Indexes & Constraints**
+### **🔹 Add an Index**
+```sql
+CREATE INDEX idx_email ON customers(email);
+```
+### **🔹 Drop an Index**
+```sql
+DROP INDEX idx_email ON customers;
+```
+### **🔹 Add a Unique Constraint**
+```sql
+ALTER TABLE customers ADD CONSTRAINT unique_email UNIQUE (email);
+```
+### **🔹 Remove Unique Constraint**
+```sql
+ALTER TABLE customers DROP INDEX unique_email;
+```
+
+---
+
+## **📌 8. Table Backup & Restore**
+### **🔹 Create a Backup Table**
+```sql
+CREATE TABLE backup_customers AS SELECT * FROM customers;
+```
+### **🔹 Restore from Backup**
+```sql
+INSERT INTO customers SELECT * FROM backup_customers;
+```
+
+---
+
+## **📌 9. Table Statistics & Size**
+### **🔹 Get Row Count**
+```sql
+SELECT COUNT(*) FROM customers;
+```
+### **🔹 Get Table Size**
+```sql
+SELECT table_name, round(((data_length + index_length) / 1024 / 1024), 2) AS "Size (MB)" 
+FROM information_schema.tables 
+WHERE table_schema = 'your_database_name';
+```
+
+---
+
+## **📌 10. Advanced Table Operations**
+### **🔹 Partition a Table (Large Data Optimization)**
+```sql
+CREATE TABLE orders_partitioned (
+    order_id INT NOT NULL,
+    order_date DATE NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (order_id, order_date)
+)
+PARTITION BY RANGE (YEAR(order_date)) (
+    PARTITION p0 VALUES LESS THAN (2023),
+    PARTITION p1 VALUES LESS THAN (2024),
+    PARTITION p2 VALUES LESS THAN (2025)
+);
+```
+
+---
+
+### **🚀 Do You Need a Specific Query?**  
+Let me know if you need queries for a specific **use case, performance optimization, or debugging**! 🚀
