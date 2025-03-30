@@ -1,4 +1,4 @@
-Here’s a comprehensive list of **all possible SQL queries related to tables**, including **creation, modification, deletion, and retrieval of structure**.
+Heres a comprehensive list of **all possible SQL queries related to tables**, including **creation, modification, deletion, and retrieval of structure**.
 
 ---
 
